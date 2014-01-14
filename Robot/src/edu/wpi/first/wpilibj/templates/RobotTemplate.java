@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.Timer;
 public class RobotTemplate extends SimpleRobot {
     RobotDrive drive = new RobotDrive(1, 2);
     Joystick rightStick = new Joystick(1);
+        Joystick leftStick = new Joystick(2);
+
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
@@ -39,10 +41,10 @@ public class RobotTemplate extends SimpleRobot {
 
             
             //drive.setSafetyEnabled(true);
-            if(rightStick.getTrigger()) {
+            if(rightStick.getTrigger() || leftStick.getTrigger()) {
                 drive.setMaxOutput(1f);
             }
-            if(rightStick.getTop()) {
+            if(rightStick.getTop() || leftStick.getTop()) {
                 drive.setMaxOutput(0.25f);
             }
                         /*
@@ -53,7 +55,8 @@ public class RobotTemplate extends SimpleRobot {
                     
                     */
             //drive.arcadeDrive(pow(-rightStick.getY(), 2), pow(-rightStick.getX(), 2));
-            drive(true, true);
+            //drive(true, true);
+            tankDrive(true);
 //drive.arcadeDrive(rightStick, true); // drive with joysticks
             Timer.delay(0.005);
         }
@@ -68,6 +71,19 @@ public class RobotTemplate extends SimpleRobot {
             f = -f;
         }
         return f;
+    }
+    
+    private void tankDrive(boolean squareForwards) {
+        double right = rightStick.getY();
+        double left = leftStick.getY();
+        
+        right = pow(right, 2);
+        left = pow(left, 2);
+        
+        left *= 0.95;
+        right *= 0.95;
+        
+        drive.tankDrive(left, right);
     }
     
     private void drive(boolean squareForwards, boolean proportional) {
