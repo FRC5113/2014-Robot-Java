@@ -9,7 +9,6 @@ package edu.wpi.first.wpilibj.templates;
 
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
 /**
@@ -20,9 +19,13 @@ import edu.wpi.first.wpilibj.Timer;
  * directory.
  */
 public class RobotTemplate extends SimpleRobot {
-    RobotDrive drive = new RobotDrive(1, 2);
     Joystick rightStick = new Joystick(1);
-        Joystick leftStick = new Joystick(2);
+    Joystick leftStick = new Joystick(2);
+    Wheels wheels = new Wheels();
+    
+    int msPerTick = 5;
+    long lastTick = 0;
+    
 
     /**
      * This function is called once each time the robot enters autonomous mode.
@@ -35,116 +38,20 @@ public class RobotTemplate extends SimpleRobot {
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-        while (true && isOperatorControl() && isEnabled())
-        {
-                        drive.setMaxOutput(0.3f);
-
+        while (isOperatorControl() && isEnabled())
+        {           
             
-            //drive.setSafetyEnabled(true);
-            if(rightStick.getTrigger() || leftStick.getTrigger()) {
-                drive.setMaxOutput(1f);
-            }
-            if(rightStick.getTop() || leftStick.getTop()) {
-                drive.setMaxOutput(0.25f);
-            }
-                        /*
-            if(rightStick.getX() == 0 && rightStick.getY() == 0) {
-                drive.setMaxOutput(0);
-                drive.stopMotor();
-            }
-                    
-                    */
-            //drive.arcadeDrive(pow(-rightStick.getY(), 2), pow(-rightStick.getX(), 2));
-            //drive(true, true);
-            tankDrive(true);
-//drive.arcadeDrive(rightStick, true); // drive with joysticks
-            Timer.delay(0.005);
-        }
-    }
-    
-    private double pow(double a, int b) {
-        double f = a;
-        for(int c = 0; c < b; c++) {
-            f *= f;
-        }
-        if(a < 0) {
-            f = -f;
-        }
-        return f;
-    }
-    
-    private void tankDrive(boolean squareForwards) {
-        double right = rightStick.getY();
-        double left = leftStick.getY();
-        
-        right = pow(right, 2);
-        left = pow(left, 2);
-        
-        left *= 0.95;
-        right *= 0.95;
-        
-        drive.tankDrive(left, right);
-    }
-    
-    private void drive(boolean squareForwards, boolean proportional) {
-        //double x = rightStick.getX();
-        double y = rightStick.getY();
-        
-        if(squareForwards) {
-            y = -pow(y, 2);
-        }
-        
-        double right;
-        double left;
-        
-        right = y;
-        left = y;
-        
-        //right += x;
-        //left -= x;
-        
-        //If proportional, we treat the joystick as a virtual circle and use proportions instead of regular x and y.
-        if(proportional) {
-            if(right > 1) {
-                left *= (1 / right);
-                right = 1;
-            }
-            else if(right < -1) {
-                left *= (-1 / right);
-                right = -1;
-            }
+            //Because of the large amount of calculations and relying on mechanical parts,
+            //We cannot delay for a specific, set amount of time for each time the while loop runs.
+            //Instead, we make sure that the amount of time passed has been great enough.
+            if(System.currentTimeMillis() - lastTick >= msPerTick) {              
             
-            if(left > 1) {
-                right *= (1 / left);
-                left = 1;
-            }
-            else if(left < -1) {
-                right *= (-1 / left);
-                left = -1;
-            }
-        }
-        
-        //Prevent motor from doing more than 100%.
-        if(left > 1) {
-            left = 1;
-        }
-        if(left < -1) {
-            left = -1;
-        }
-        if(right > 1) {
-            right = 1;
-        }
-        if(right < -1) {
-            right = -1;
-        }
-        
-        //Prevent motor from doing 100%.
-        right *= 0.99f;
-        left *= 0.99f;
-        
-        
+                lastTick = System.currentTimeMillis();
+                
+                
+                wheels.idleLogic(rightStick, leftStick);
             
-        drive.tankDrive(right, left);
-               
+            }
+        }
     }
 }
