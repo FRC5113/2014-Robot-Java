@@ -10,7 +10,7 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SimpleRobot;
-import edu.wpi.first.wpilibj.Timer;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the SimpleRobot
@@ -44,10 +44,10 @@ public class RobotTemplate extends SimpleRobot {
             //Because of the large amount of calculations and relying on mechanical parts,
             //We cannot delay for a specific, set amount of time for each time the while loop runs.
             //Instead, we make sure that the amount of time passed has been great enough.
+            //This also needs testing.
             if(System.currentTimeMillis() - lastTick >= msPerTick) {              
             
-                lastTick = System.currentTimeMillis();
-                
+                lastTick = System.currentTimeMillis();                
                 
                 wheels.idleLogic(rightStick, leftStick);
             

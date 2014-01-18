@@ -14,11 +14,17 @@ import edu.wpi.first.wpilibj.RobotDrive;
  * @author MHS
  */
 public class Wheels {
-     RobotDrive drive = new RobotDrive(1, 2);
+     private RobotDrive drive = new RobotDrive(1, 2);
+     
+     boolean useTankDrive = false;
 
-    
+    /*
+     Similar to pow, but only uses integer exponents and
+     keeps negative inputs negative.
+     */
      private double powJoystick(double a, int b) {
-        double f = a;
+        double f;
+        f = Math.abs(a);
         for(int c = 1; c < b; c++) {
             f *= f;
         }
@@ -28,6 +34,9 @@ public class Wheels {
         return f;
     }
     
+     /*
+     Two joysticks are used, one for each set of wheels.
+     */
     private void tankDrive(Joystick rightStick, Joystick leftStick, boolean squareForwards) {
         double right = rightStick.getY();
         double left = leftStick.getY();
@@ -41,6 +50,9 @@ public class Wheels {
         drive.tankDrive(left, right);
     }
     
+    /*
+    "Arcade Drive", where only one joystick is used.
+    */
     public void drive(Joystick rightStick, boolean squareForwards, boolean proportional) {
         double x = rightStick.getX();
         double y = rightStick.getY();
@@ -103,26 +115,31 @@ public class Wheels {
                
     }
     
-    public void idleLogic(Joystick rightStick, Joystick leftStick) {
-                 drive.setMaxOutput(0.4f);
+    /*
+    Controls simple player control, speed control, motor safety, etc.
+    */
+    public void idleLogic(Joystick rightStick, Joystick leftStick) {            
+            drive.setSafetyEnabled(true);
 
-            
-            //drive.setSafetyEnabled(true);
-            if(rightStick.getTrigger() || leftStick.getTrigger()) {
-                drive.setMaxOutput(0.7f);
-            }
+            //Set wheel speed
             if(rightStick.getTop() || leftStick.getTop()) {
                 drive.setMaxOutput(0.25f);
             }
-                        /*
-            if(rightStick.getX() == 0 && rightStick.getY() == 0) {
-                drive.setMaxOutput(0);
-                drive.stopMotor();
+            else if(rightStick.getTrigger() || leftStick.getTrigger()) {
+                drive.setMaxOutput(0.7f);        
             }
-                    
-                    */
+            else {
+                drive.setMaxOutput(0.4f);
+            }
+                   
             
-             drive(rightStick, true, true);
+            //Pick drive method
+            if(useTankDrive) {
+                tankDrive(rightStick, leftStick, true);
+            }
+            else {
+                drive(rightStick, true, true);
+            }
 
             
     }
