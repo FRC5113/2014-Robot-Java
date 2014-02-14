@@ -23,11 +23,27 @@ public class MonitorControl {
     JoystickButton grabberOut;
     int grabberOutPos = 6;
     
+    JoystickButton lifterUp;
+    int lifterUpPos = 4;
+    
+    JoystickButton lifterDown;
+    int lifterDownPos = 3;
+    
+    JoystickButton eStop;
+    int eStopPos = 9;
+    
+    JoystickButton eDisable;
+    int eDisablePos = 10;
+    
     
     public MonitorControl(int input) {
         js = new Joystick(input);
         grabberIn = new JoystickButton(js, grabberInPos);
         grabberOut = new JoystickButton(js,grabberOutPos);
+        lifterUp = new JoystickButton(js, lifterUpPos);
+        lifterDown = new JoystickButton(js, lifterDownPos);
+        eStop = new JoystickButton(js,eStopPos);
+        eDisable = new JoystickButton(js, eDisablePos);
     }
     
     public void update() {
@@ -36,6 +52,10 @@ public class MonitorControl {
         else if(grabberOut.get()) {
             RobotTemplate.grabber.takeInput(-1);
         }
+        
+        if(eStop.get())
+            RobotTemplate.wheels.emergencyStop();
+         
     }
     
 }

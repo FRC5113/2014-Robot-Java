@@ -23,6 +23,8 @@ public class DriverJoysticks {
    
     Button turboRight;
     Button turboLeft;
+    Button slowRight;
+    Button slowLeft;
     Button stopRight;
     Button stopLeft;
     double speedDefault;
@@ -34,6 +36,8 @@ public class DriverJoysticks {
 
         turboRight = new JoystickButton(rightStick, 3);
         turboLeft = new JoystickButton(leftStick, 3);
+        slowRight = new JoystickButton(rightStick, 2);
+        slowLeft = new JoystickButton(leftStick, 2);
         stopRight = new JoystickButton(rightStick, 6);
         stopLeft = new JoystickButton(leftStick, 6);
         SmartDashboard.putNumber("speedMax", speedMax);
@@ -46,8 +50,11 @@ public class DriverJoysticks {
     
     public void update() {
         
-        //Do speed control calling tomorrow/ whenever we meet next :)
+        RobotTemplate.wheels.speedControl(turboRight.get() || turboLeft.get(), slowRight.get() || slowLeft.get());
         
+        if(stopRight.get() || stopLeft.get()){
+            RobotTemplate.wheels.emergencyStop();
+        }
     }
     
 }

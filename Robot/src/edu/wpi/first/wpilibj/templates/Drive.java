@@ -24,6 +24,8 @@ public class Drive {
          double speedDefault = 0.4;
          double speedMax = 0.7;
          double speedMin = 0.25;
+         
+         boolean isEmergencyStopped = false;
 
     /*
      Similar to pow, but only uses integer exponents and
@@ -65,7 +67,7 @@ public class Drive {
     public void speedControl(boolean useSpeedMax, boolean useSpeedMin) {
         drive.setSafetyEnabled(true);
        
-        
+        if(isEmergencyStopped == false){
        
         //Set wheel speed
         if (useSpeedMin) {
@@ -73,15 +75,20 @@ public class Drive {
         } else if (useSpeedMax) {
             drive.setMaxOutput(speedMax);
         } else  
-            drive.setMaxOutput(speedDefault);  
-
+            drive.setMaxOutput(speedDefault); 
+        
     }
-    
+        else{
+              drive.setMaxOutput(0.0);
+              isEmergencyStopped = false;
+            }
+    }
     /*
     Stops motors from moving, but does not "Disable".
     */
     public void emergencyStop() {
-        //TODO: DO THIS METHOD.
+        
+        isEmergencyStopped = true;
     }
     
     public void useMotors(){
