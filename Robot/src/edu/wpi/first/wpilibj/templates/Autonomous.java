@@ -10,6 +10,8 @@ package edu.wpi.first.wpilibj.templates;
  *
  * @author MHS
  */
-public class Kicker {
+public class Autonomous {
+    
+    
     
 }

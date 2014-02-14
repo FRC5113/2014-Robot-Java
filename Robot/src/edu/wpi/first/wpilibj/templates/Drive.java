@@ -19,12 +19,11 @@ public class Drive {
 
     private RobotDrive drive = new RobotDrive(3, 4);
     
-    double speedDefault = 0.4;
-    double speedMax = 0.7;
-    double speedMin = 0.25;
-    
-
     boolean useTankDrive = true;
+    
+         double speedDefault = 0.4;
+         double speedMax = 0.7;
+         double speedMin = 0.25;
 
     /*
      Similar to pow, but only uses integer exponents and
@@ -48,10 +47,6 @@ public class Drive {
     private void tankDrive(Joystick rightStick, Joystick leftStick, boolean squareForwards) {
         double right = rightStick.getY();
         double left = leftStick.getY();
-        
-        SmartDashboard.putNumber("speedMax", speedMax);
-        SmartDashboard.putNumber("speedMin", speedMin);
-        SmartDashboard.putNumber("speedDefault", speedDefault);
 
         right = powJoystick(right, 1);
         left = powJoystick(left, 1);
@@ -67,33 +62,32 @@ public class Drive {
     /*
      Controls simple player control, speed control, motor safety, etc.
      */
-    public void update(Joystick rightStick, Joystick leftStick) {
+    public void speedControl(boolean useSpeedMax, boolean useSpeedMin) {
         drive.setSafetyEnabled(true);
+       
         
-        Button turboRight = new JoystickButton(rightStick, 3);
-        Button turboLeft = new JoystickButton(leftStick, 3);
-        Button stopRight = new JoystickButton(rightStick, 6);
-        Button stopLeft = new JoystickButton(leftStick, 6);
        
         //Set wheel speed
-        if (rightStick.getTop() || leftStick.getTop()) {
+        if (useSpeedMin) {
             drive.setMaxOutput(speedMin);
-        } else if (turboRight.get() || turboLeft.get()) {
+        } else if (useSpeedMax) {
             drive.setMaxOutput(speedMax);
-        } else if (stopRight.get() && stopLeft.get())  {
-            drive.setMaxOutput(0.0f);
         } else  
-            drive.setMaxOutput(speedDefault);
-         
-              
-    
-        //Pick drive method
-        if (useTankDrive) {
-            tankDrive(rightStick, leftStick, true);
-        } else {
-            drive(rightStick, true, true);
-        }
+            drive.setMaxOutput(speedDefault);  
 
+    }
+    
+    /*
+    Stops motors from moving, but does not "Disable".
+    */
+    public void emergencyStop() {
+        //TODO: DO THIS METHOD.
+    }
+    
+    public void useMotors(){
+        
+        tankDrive(RobotTemplate.driveSticks.rightStick, RobotTemplate.driveSticks.leftStick, true);
+        
     }
     
     public void simpleDrive(float left, float right) {
