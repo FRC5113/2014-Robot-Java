@@ -15,22 +15,22 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class MonitorControl {
 
-    Joystick js;
+    private Joystick js;
 
-    JoystickButton grabberIn;
-    int grabberInPos = 5;
+    private JoystickButton grabberIn;
+    private int grabberInPos = 5;
 
-    JoystickButton grabberOut;
-    int grabberOutPos = 6;
+    private JoystickButton grabberOut;
+    private int grabberOutPos = 6;
 
-    JoystickButton lifterUp;
-    int lifterUpPos = 4;
+    private JoystickButton lifterUp;
+    private int lifterUpPos = 3;
 
-    JoystickButton lifterDown;
-    int lifterDownPos = 3;
+    private JoystickButton lifterDown;
+    private int lifterDownPos = 4;
 
-    JoystickButton eStop;
-    int eStopPos = 9;
+    private JoystickButton eStop;
+    private int eStopPos = 9;
 
     public MonitorControl(int input) {
         js = new Joystick(input);
