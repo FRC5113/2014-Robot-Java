@@ -23,32 +23,35 @@ public class RobotTemplate extends SimpleRobot {
     public static MonitorControl monitor;// = new MonitorControl(3);
     public static DriverJoysticks driveSticks;// = new DriverJoysticks(1, 2);
     public static Autonomous auto;// = new Autonomous();
-    //public static CameraBase base = new CameraBase();
+    public static CameraBase base;// = new CameraBase();
 
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
     public void autonomous() {
-        /*while (isAutonomous() && isEnabled()) {
-         auto.update();
-         }
-         */
+        wheels.leftEncoder.reset();
+        wheels.rightEncoder.reset();
+        while (isAutonomous() && isEnabled()) {
+            auto.update();
+            Timer.delay(0.005f);
+        }
+
         System.err.println("Starting Auto Control");
     }
-    
+
     protected void robotInit() {
-        
+
         wheels = new Drive();
         grabber = new Grabber();
         monitor = new MonitorControl(3);
         driveSticks = new DriverJoysticks(1, 2);
+        base = new CameraBase();
     }
 
     /**
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-        
 
         System.err.println("Starting Operator Control");
 
@@ -57,7 +60,7 @@ public class RobotTemplate extends SimpleRobot {
         while (isOperatorControl() && isEnabled()) {
 
             driveSticks.update();
-            //monitor.update();
+            monitor.update();
 
             grabber.update();
             wheels.useMotors();

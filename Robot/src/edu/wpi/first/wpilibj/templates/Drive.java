@@ -40,7 +40,7 @@ public class Drive {
     private double speedMin = 0.25;
 
     private boolean isEmergencyStopped = false;
-    
+
     public Drive() {
         rightEncoder.start();
         leftEncoder.start();
@@ -114,9 +114,9 @@ public class Drive {
     public void useMotors() {
 
         tankDrive(RobotTemplate.driveSticks.getRightJoystick(), RobotTemplate.driveSticks.getLeftJoystick(), true);
-        
+
         System.out.println(leftEncoder.getRaw());
-        
+
         SmartDashboard.putNumber("LeftEncoderGet", leftEncoder.get());
         SmartDashboard.putNumber("LeftEncoderGetDistance", leftEncoder.getDistance());
         SmartDashboard.putNumber("LeftEncoderGetRaw", leftEncoder.getRaw());
@@ -124,7 +124,6 @@ public class Drive {
         SmartDashboard.putNumber("RightEncoderGet", rightEncoder.get());
         SmartDashboard.putNumber("RightEncoderGetDistance", rightEncoder.getDistance());
         SmartDashboard.putNumber("RightEncoderGetRaw", rightEncoder.getRaw());
-                
 
     }
 

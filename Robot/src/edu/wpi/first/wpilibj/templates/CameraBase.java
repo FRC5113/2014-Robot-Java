@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,25 +14,38 @@ import edu.wpi.first.wpilibj.Servo;
  * @author MHS
  */
 public class CameraBase {
-    
-    int x = 8;
-    int y = 9;
-    Servo servoX = new Servo(x);
-    Servo servoY = new Servo(y);
 
-    Joystick js;// = RobotTemplate.monitor.getJoystick();    
-    
-    
+    int xOut = 8;
+    int yOut = 9;
+
+    float x;
+    float y;
+    float add = 0.0001f;
+
+    Servo servoX = new Servo(xOut);
+    Servo servoY = new Servo(yOut);
+
+    Joystick js = RobotTemplate.monitor.getJoystick();
+
     public void update() {
-        //servoX.startLiveWindowMode();
-        System.out.println("works?");
-        System.out.println(js.getX() + ", " + js.getY() + ", " + servoX.getRaw());
-        servoX.set(Math.abs(js.getX()));
-        servoY.set(Math.abs(js.getY()));
 
-        //servoX.updateTable();
-        
-        
+        x += js.getX() * add;
+        y += js.getY() * add;
+
+        if (x > 1) {
+            x = 1;
+        } else if (x < 0) {
+            x = 0;
+        }
+        if (y > 1) {
+            y = 1;
+        } else if (y < 0) {
+            y = 0;
+        }
+
+        servoX.set(x);
+        servoY.set(y);
+
     }
-    
+
 }

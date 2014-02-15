@@ -18,16 +18,16 @@ public class MonitorControl {
     private Joystick js;
 
     private JoystickButton grabberIn;
-    private int grabberInPos = 5;
+    private int grabberInPos = 3;
 
     private JoystickButton grabberOut;
-    private int grabberOutPos = 6;
+    private int grabberOutPos = 4;
 
     private JoystickButton lifterUp;
-    private int lifterUpPos = 3;
+    private int lifterUpPos = 5;
 
     private JoystickButton lifterDown;
-    private int lifterDownPos = 4;
+    private int lifterDownPos = 6;
 
     private JoystickButton eStop;
     private int eStopPos = 9;
@@ -40,7 +40,7 @@ public class MonitorControl {
         lifterDown = new JoystickButton(js, lifterDownPos);
         eStop = new JoystickButton(js, eStopPos);
     }
-    
+
     public Joystick getJoystick() {
         return js;
     }
