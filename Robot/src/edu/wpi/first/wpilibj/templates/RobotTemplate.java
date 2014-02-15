@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -19,39 +18,51 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class RobotTemplate extends SimpleRobot {
 
-    public static Drive wheels = new Drive();
-    public static Grabber grabber = new Grabber();
-    public static CameraBase base = new CameraBase();   
-    public static MonitorControl monitor = new MonitorControl(3);
-    public static DriverJoysticks driveSticks = new DriverJoysticks(1, 2);
-    public static Autonomous auto = new Autonomous();
+    public static Drive wheels;// = new Drive();
+    public static Grabber grabber;// = new Grabber();
+    public static MonitorControl monitor;// = new MonitorControl(3);
+    public static DriverJoysticks driveSticks;// = new DriverJoysticks(1, 2);
+    public static Autonomous auto;// = new Autonomous();
+    //public static CameraBase base = new CameraBase();
 
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
     public void autonomous() {
-        while(isAutonomous() && isEnabled()) {
-            auto.update();
-        }
+        /*while (isAutonomous() && isEnabled()) {
+         auto.update();
+         }
+         */
+        System.err.println("Starting Auto Control");
+    }
+    
+    protected void robotInit() {
+        
+        wheels = new Drive();
+        grabber = new Grabber();
+        monitor = new MonitorControl(3);
+        driveSticks = new DriverJoysticks(1, 2);
     }
 
     /**
      * This function is called once each time the robot enters operator control.
      */
-
     public void operatorControl() {
         
-        System.err.println("Starting Operator Control...");
-        
+
+        System.err.println("Starting Operator Control");
+
+        System.err.println("End joysticks creation");
+
         while (isOperatorControl() && isEnabled()) {
-            
+
             driveSticks.update();
-            monitor.update();
-            
+            //monitor.update();
+
             grabber.update();
             wheels.useMotors();
 
-            
+            //base.update();
             Timer.delay(0.005f);
         }
     }

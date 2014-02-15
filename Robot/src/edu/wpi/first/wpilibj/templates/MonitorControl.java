@@ -40,6 +40,10 @@ public class MonitorControl {
         lifterDown = new JoystickButton(js, lifterDownPos);
         eStop = new JoystickButton(js, eStopPos);
     }
+    
+    public Joystick getJoystick() {
+        return js;
+    }
 
     public void update() {
         if (grabberIn.get()) {

@@ -16,12 +16,12 @@ import edu.wpi.first.wpilibj.Servo;
  */
 public class CameraBase {
     
-    int x = 7;
-    int y = 8;
+    int x = 8;
+    int y = 9;
     Servo servoX = new Servo(x);
     Servo servoY = new Servo(y);
 
-    Joystick js;    
+    Joystick js;// = RobotTemplate.monitor.getJoystick();    
     
     
     public void update() {
@@ -29,6 +29,8 @@ public class CameraBase {
         System.out.println("works?");
         System.out.println(js.getX() + ", " + js.getY() + ", " + servoX.getRaw());
         servoX.set(Math.abs(js.getX()));
+        servoY.set(Math.abs(js.getY()));
+
         //servoX.updateTable();
         
         
