@@ -18,12 +18,12 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class RobotTemplate extends SimpleRobot {
 
-    public static Drive wheels;// = new Drive();
-    public static Grabber grabber;// = new Grabber();
-    public static MonitorControl monitor;// = new MonitorControl(3);
-    public static DriverJoysticks driveSticks;// = new DriverJoysticks(1, 2);
-    public static Autonomous auto;// = new Autonomous();
-    public static CameraBase base;// = new CameraBase();
+    public static Drive wheels;
+    public static Grabber grabber;
+    public static MonitorControl monitor;
+    public static DriverJoysticks driveSticks;
+    public static Autonomous auto;
+    public static CameraBase base;
 
     /**
      * This function is called once each time the robot enters autonomous mode.
@@ -34,39 +34,38 @@ public class RobotTemplate extends SimpleRobot {
         while (isAutonomous() && isEnabled()) {
             auto.update();
             Timer.delay(0.005f);
-        }
-
-        System.err.println("Starting Auto Control");
-    }
+        }//end while
+    }//end autonomous()
 
     protected void robotInit() {
-
+        
         wheels = new Drive();
         grabber = new Grabber();
         monitor = new MonitorControl(3);
         driveSticks = new DriverJoysticks(1, 2);
+        auto = new Autonomous();
         base = new CameraBase();
-    }
+    }//end robotInit()
 
     /**
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-
-        System.err.println("Starting Operator Control");
-
-        System.err.println("End joysticks creation");
-
+        
+        //this is here just incase something goes horribly wrong.   (I just say this cus I dont know why we did this)
+                                                                    //No one actually knows what exactly happens in the substructure
+        //if something breaks the while won't execute and the robot will stand still
         while (isOperatorControl() && isEnabled()) {
-
-            driveSticks.update();
-            monitor.update();
-
-            grabber.update();
-            wheels.useMotors();
-
-            //base.update();
-            Timer.delay(0.005f);
-        }
-    }
-}
+            driveSticks.update();   //DriverJoysticks, which are controlling input from the joysticks to make it meaningful
+              
+            monitor.update();       //MonitorControl update() method 
+                                    //Note: MonitorControl is actually those pins that grab the ball
+            
+            grabber.update();       //apparantly so is grabber, JAKE TELL ME WHAT YOU DID!!!
+            wheels.useMotors();     //simple this is the wheels, like the ones that move the robot along the earths surface
+            base.update();          // remember that camera thats so cool, yea this is what makes it MMMMOOOOVVVVEEEE
+            
+            Timer.delay(0.005f);    //gotta delay cus otherwise we get weird errors
+        }//end while
+    }//end operatorControl()
+}//end class RobotTemplate

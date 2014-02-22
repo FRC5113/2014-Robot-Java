@@ -112,10 +112,11 @@ public class Drive {
     }
 
     public void useMotors() {
-
+        //System.out.println(RobotTemplate.driveSticks.getLeftJoystick().getY());
+        //System.err.println(RobotTemplate.driveSticks.getRightJoystick().getY());
         tankDrive(RobotTemplate.driveSticks.getRightJoystick(), RobotTemplate.driveSticks.getLeftJoystick(), true);
 
-        System.out.println(leftEncoder.getRaw());
+        //System.out.println(leftEncoder.getRaw());
 
         SmartDashboard.putNumber("LeftEncoderGet", leftEncoder.get());
         SmartDashboard.putNumber("LeftEncoderGetDistance", leftEncoder.getDistance());
@@ -124,11 +125,10 @@ public class Drive {
         SmartDashboard.putNumber("RightEncoderGet", rightEncoder.get());
         SmartDashboard.putNumber("RightEncoderGetDistance", rightEncoder.getDistance());
         SmartDashboard.putNumber("RightEncoderGetRaw", rightEncoder.getRaw());
-
     }
 
     public void simpleDrive(float left, float right) {
-        drive.tankDrive(left, right);
+        drive.tankDrive(left, right, false);
     }
 
 }

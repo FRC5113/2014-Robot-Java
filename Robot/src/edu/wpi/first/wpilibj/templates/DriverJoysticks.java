@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
+ * This class pretty much starts control 
  * @author MHS
  */
 public class DriverJoysticks {
@@ -38,10 +38,10 @@ public class DriverJoysticks {
     private int stopLeftPos = 6;
 
     private Button grabberInLeft;
-    private int grabberInLeftPos = 1;
-
+    private int grabberInLeftPos = 1;   //since you cant see what button this refers to on the joystick
+                                        //its the trigger (took me a while to figure it out)
     private Button grabberOutRight;
-    private int grabberOutRightPos = 1;
+    private int grabberOutRightPos = 1; //its that sneaky trigger again
 
     private double speedDefault;
     private double speedMax;
@@ -71,25 +71,32 @@ public class DriverJoysticks {
         grabberOutRight = new JoystickButton(rightStick, grabberOutRightPos);
 
         SmartDashboard.putNumber("speedMax", speedMax);
-        SmartDashboard.putNumber("speedMin", speedMin);
+        SmartDashboard.putNumber("speedMin", speedMin);         //marks our failed attempts at getting SmartDashboard working
         SmartDashboard.putNumber("speedDefault", speedDefault);
 
     }
 
     public void update() {
         
-        System.err.println("Updating joysticks drivers");
-
+        //Jake wrote a speed control function so that when the robot moves you can go faster or slower
+        //this line does that fancy stuff, well it calls the method that does that fancy stuff
         RobotTemplate.wheels.speedControl(turboRight.get() || turboLeft.get(), slowRight.get() || slowLeft.get());
 
+        //this is where emergency stop is called, I can verify from personal experience that it does work
         if (stopRight.get() || stopLeft.get()) {
             RobotTemplate.wheels.emergencyStop();
         }
 
-        if (grabberInLeft.get()) {
+        //Human explanation of what this does is preferred...
+        //pretty much this is where we send input for the pins that pick up and put down the ball.
+        //go to Grabber.java and the takeInput(int direction) method to see what happens next!
+        if (grabberInLeft.get()) 
+        {
             RobotTemplate.grabber.takeInput(1);
-        } else if (grabberOutRight.get()) {
-            RobotTemplate.grabber.takeInput(-1);
-        }
-    }
-}
+        } 
+        else if (grabberOutRight.get()) 
+             {                                           //whoever updates these comments please put what left and right do
+                 RobotTemplate.grabber.takeInput(-1);    //as in: does left or right push the ball out?
+             }//end else/if                              //simple testing of the robot will give you the answer to this question
+    }//end based update()
+}//end class DriverJoysticks

@@ -6,7 +6,6 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Servo;
 
 /**
@@ -15,37 +14,48 @@ import edu.wpi.first.wpilibj.Servo;
  */
 public class CameraBase {
 
-    int xOut = 8;
-    int yOut = 9;
+    int xOut = 9;       //the digital I/O ports
+    int yOut = 8;       //yup still digital I/O ports
 
-    float x;
-    float y;
-    float add = 0.0001f;
+    float x = 0.5f;     //This is gonna be the starting point for the camera
+    float y = 0.5f;     //values range from 0.0 to 1.0 so starting in the middle is cool
+    float add = 0.005f; //when we adjust the camera, we add this number to x or y on every update()
 
-    Servo servoX = new Servo(xOut);
+    Servo servoX = new Servo(xOut);     //those motor things on the camera are called Servos apparantly
     Servo servoY = new Servo(yOut);
 
-    Joystick js = RobotTemplate.monitor.getJoystick();
+    Joystick js = RobotTemplate.monitor.getJoystick();  //this finds out which button we are using to control the camera
 
+    //this is the method that is called in RobotTemplate in the operatorControl() method
+    //and is called about every 0.005s (George wrote this but is unsure of this statement)
     public void update() {
 
-        x += js.getX() * add;
-        y += js.getY() * add;
+        x += js.getX() * add;   // this adjusts the values of x and y
+        y -= js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
 
-        if (x > 1) {
+        //this part just makes sure we don't go over 1.0 or under 0.0 on the servos
+        if (x > 1) 
+        {
             x = 1;
-        } else if (x < 0) {
-            x = 0;
-        }
-        if (y > 1) {
+        }//end "x" if
+        else if (x < 0) 
+             {
+                x = 0;
+             }//end "x" else/if
+        
+        //now adjusting the y value
+        if (y > 1) 
+        {
             y = 1;
-        } else if (y < 0) {
-            y = 0;
-        }
-
+        }//end "y" if 
+        else if (y < 0)
+             {
+               y = 0;
+             }//end "y" else/if
+        
+        //puts those new values into the servos and moves the camera :D
         servoX.set(x);
         servoY.set(y);
 
-    }
-
-}
+    }//end update()
+}//end class CameraBase
