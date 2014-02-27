@@ -16,14 +16,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriverJoysticks {
 
-    private Joystick rightStick;
+    private Joystick rightStick;    //Use 2 Joystick 3D for driving
     private Joystick leftStick;
 
     private Button turboRight;
-    private int turboRightPos = 3;
+    private int turboRightPos = 2;
 
     private Button turboLeft;
-    private int turboLeftPos = 3;
+    private int turboLeftPos = 2;
 
     private Button slowRight;
     private int slowRightPos = 2;
@@ -32,15 +32,15 @@ public class DriverJoysticks {
     private int slowLeftPos = 2;
 
     private Button stopRight;
-    private int stopRightPos = 6;
+    private int stopRightPos = 10;
 
     private Button stopLeft;
-    private int stopLeftPos = 6;
+    private int stopLeftPos = 10;
 
-    private Button grabberInLeft;
+    public static Button grabberInLeft;
     private int grabberInLeftPos = 1;   //since you cant see what button this refers to on the joystick
                                         //its the trigger (took me a while to figure it out)
-    private Button grabberOutRight;
+    public static Button grabberOutRight;
     private int grabberOutRightPos = 1; //its that sneaky trigger again
 
     private double speedDefault;
@@ -86,17 +86,5 @@ public class DriverJoysticks {
         if (stopRight.get() || stopLeft.get()) {
             RobotTemplate.wheels.emergencyStop();
         }
-
-        //Human explanation of what this does is preferred...
-        //pretty much this is where we send input for the pins that pick up and put down the ball.
-        //go to Grabber.java and the takeInput(int direction) method to see what happens next!
-        if (grabberInLeft.get()) 
-        {
-            RobotTemplate.grabber.takeInput(1);
-        } 
-        else if (grabberOutRight.get()) 
-             {                                           //whoever updates these comments please put what left and right do
-                 RobotTemplate.grabber.takeInput(-1);    //as in: does left or right push the ball out?
-             }//end else/if                              //simple testing of the robot will give you the answer to this question
     }//end based update()
 }//end class DriverJoysticks

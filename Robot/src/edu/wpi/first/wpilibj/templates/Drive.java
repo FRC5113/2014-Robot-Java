@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drive {
 
-    int frontLeft = 6;
+    int frontLeft = 6;  //motor numbers
     int frontRight = 3;
     int backLeft = 5;
     int backRight = 4;
@@ -35,7 +35,7 @@ public class Drive {
 
     boolean useTankDrive = true;
 
-    private double speedDefault = 0.4;
+    private double speedDefault = 0.5;
     private double speedMax = 0.7;
     private double speedMin = 0.25;
 
@@ -46,33 +46,25 @@ public class Drive {
         leftEncoder.start();
         rightEncoder.reset();
         leftEncoder.reset();
+        SmartDashboard.putNumber("LeftEncoderGet", leftEncoder.get());
+        SmartDashboard.putNumber("LeftEncoderGetDistance", leftEncoder.getDistance());
+        SmartDashboard.putNumber("LeftEncoderGetRaw", leftEncoder.getRaw());
+
+        SmartDashboard.putNumber("RightEncoderGet", rightEncoder.get());
+        SmartDashboard.putNumber("RightEncoderGetDistance", rightEncoder.getDistance());
+        SmartDashboard.putNumber("RightEncoderGetRaw", rightEncoder.getRaw());
+        SmartDashboard.putNumber("Default Speed", speedDefault);
     }
 
     /*
      Similar to pow, but only uses integer exponents and
      keeps negative inputs negative.
-     */
-    private double powJoystick(double a, int b) {
-        double f;
-        f = Math.abs(a);
-        for (int c = 1; c < b; c++) {
-            f *= f;
-        }
-        if (a < 0) {
-            f = -f;
-        }
-        return f;
-    }
 
-    /*
      Two joysticks are used, one for each set of wheels.
      */
-    private void tankDrive(Joystick rightStick, Joystick leftStick, boolean squareForwards) {
+    private void tankDrive(Joystick rightStick, Joystick leftStick) {
         double right = rightStick.getY();
         double left = leftStick.getY();
-
-        right = powJoystick(right, 1);
-        left = powJoystick(left, 1);
 
         left *= 0.95;
         right *= 0.95;
@@ -87,48 +79,42 @@ public class Drive {
         drive.setSafetyEnabled(true);
 
         if (isEmergencyStopped == false) {
-
             //Set wheel speed
-            if (useSpeedMin) {
+            if (useSpeedMin) 
+            {
                 drive.setMaxOutput(speedMin);
-            } else if (useSpeedMax) {
-                drive.setMaxOutput(speedMax);
-            } else {
-                drive.setMaxOutput(speedDefault);
-            }
+            }//end if 
+            else if (useSpeedMax) 
+                 {
+                   drive.setMaxOutput(speedMax);
+                 }//end else/if
+                 else 
+                 {
+                   drive.setMaxOutput(speedDefault);
+                 }//end else/else
 
-        } else {
+        }//end if 
+        else 
+        {
             drive.setMaxOutput(0.0);
             isEmergencyStopped = false;
-        }
+        }//end else
     }
     /*
      Stops motors from moving, but does not "Disable".
      */
 
-    public void emergencyStop() {
-
+    public void emergencyStop() 
+    {
         isEmergencyStopped = true;
     }
 
     public void useMotors() {
-        //System.out.println(RobotTemplate.driveSticks.getLeftJoystick().getY());
-        //System.err.println(RobotTemplate.driveSticks.getRightJoystick().getY());
-        tankDrive(RobotTemplate.driveSticks.getRightJoystick(), RobotTemplate.driveSticks.getLeftJoystick(), true);
-
-        //System.out.println(leftEncoder.getRaw());
-
-        SmartDashboard.putNumber("LeftEncoderGet", leftEncoder.get());
-        SmartDashboard.putNumber("LeftEncoderGetDistance", leftEncoder.getDistance());
-        SmartDashboard.putNumber("LeftEncoderGetRaw", leftEncoder.getRaw());
-
-        SmartDashboard.putNumber("RightEncoderGet", rightEncoder.get());
-        SmartDashboard.putNumber("RightEncoderGetDistance", rightEncoder.getDistance());
-        SmartDashboard.putNumber("RightEncoderGetRaw", rightEncoder.getRaw());
-    }
-
+        tankDrive(RobotTemplate.driveSticks.getRightJoystick(), RobotTemplate.driveSticks.getLeftJoystick());
+    }    
     public void simpleDrive(float left, float right) {
-        drive.tankDrive(left, right, false);
+        drive.setMaxOutput(1.0);
+        drive.tankDrive(left, right);
     }
 
 }

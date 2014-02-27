@@ -21,7 +21,8 @@ public class Autonomous {
         SmartDashboard.putNumber("autoLeft", autoLeft);     //attempted placing values onto smartdashboard
         SmartDashboard.putNumber("autoRight", autoRight);   //note: we aren't very good at this
     }
-    public void update() {
+    public void update() 
+    {
         //the conversion factor between meters and tics. is 1 meter = 636.61 tics(which is what encoders measure)
         RobotTemplate.wheels.leftEncoder.setDistancePerPulse(1 / 636.61);       //once the code is pushed to git
         RobotTemplate.wheels.rightEncoder.setDistancePerPulse(1 / 636.61);      //place these lines within the constructor

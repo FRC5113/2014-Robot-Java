@@ -15,22 +15,22 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class MonitorControl {
 
-    private Joystick js;
+    private Joystick js;    //Use Attack 3 Joystick for monitor control
 
-    private JoystickButton grabberIn;
-    private int grabberInPos = 3;
+    public static JoystickButton grabberIn;
+    private int grabberInPos = 4;
 
-    private JoystickButton grabberOut;
-    private int grabberOutPos = 4;
+    public static JoystickButton grabberOut;
+    private int grabberOutPos = 5;
 
     private JoystickButton lifterUp;
-    private int lifterUpPos = 5;
+    private int lifterUpPos = 10;
 
     private JoystickButton lifterDown;
-    private int lifterDownPos = 6;
+    private int lifterDownPos = 11;
 
     private JoystickButton eStop;
-    private int eStopPos = 9;
+    private int eStopPos = 7;
 
     public MonitorControl(int input) {
         js = new Joystick(input);
@@ -46,12 +46,6 @@ public class MonitorControl {
     }
 
     public void update() {
-        if (grabberIn.get()) {
-            RobotTemplate.grabber.takeInput(1);
-        } else if (grabberOut.get()) {
-            RobotTemplate.grabber.takeInput(-1);
-        }
-
         if (eStop.get()) {
             RobotTemplate.wheels.emergencyStop();
         }

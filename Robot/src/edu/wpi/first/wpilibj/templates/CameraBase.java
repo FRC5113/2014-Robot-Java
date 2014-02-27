@@ -29,10 +29,12 @@ public class CameraBase {
     //this is the method that is called in RobotTemplate in the operatorControl() method
     //and is called about every 0.005s (George wrote this but is unsure of this statement)
     public void update() {
-
-        x += js.getX() * add;   // this adjusts the values of x and y
-        y -= js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
-
+        if(Math.abs(js.getX()) > 0.01) 
+            x += js.getX() * add;   // this adjusts the values of x and y
+        if(Math.abs(js.getY()) > 0.01)
+            y -= js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
+        System.out.println(js.getY());
+        System.out.println(js.getX());
         //this part just makes sure we don't go over 1.0 or under 0.0 on the servos
         if (x > 1) 
         {

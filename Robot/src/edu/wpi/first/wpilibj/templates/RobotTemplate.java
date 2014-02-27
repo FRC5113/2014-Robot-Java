@@ -59,7 +59,7 @@ public class RobotTemplate extends SimpleRobot {
             driveSticks.update();   //DriverJoysticks, which are controlling input from the joysticks to make it meaningful
               
             monitor.update();       //MonitorControl update() method 
-                                    //Note: MonitorControl is actually those pins that grab the ball
+                                    //Note: MonitorControl is the joystick for
             
             grabber.update();       //apparantly so is grabber, JAKE TELL ME WHAT YOU DID!!!
             wheels.useMotors();     //simple this is the wheels, like the ones that move the robot along the earths surface

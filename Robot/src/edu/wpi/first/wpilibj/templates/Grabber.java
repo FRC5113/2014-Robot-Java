@@ -14,49 +14,46 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Grabber {
 
-    private int pinGrabberLeft = 1; 
-    private int pinGrabberRight = 2;
+    private int pinGrabberLeft = 1;     //these are the motor numbers
+    private int pinGrabberRight = 2;    //these are the motor numbers
 
     private RobotDrive drive = new RobotDrive(pinGrabberLeft, pinGrabberRight);
 
     private int direction;
-    private float speed = 0.95f;    //speed of the 
+    private float speed = 0.95f;    //speed is not 1.0 cus the joysticks sometimes input above 1.0
 
     
     public Grabber() {
         SmartDashboard.putNumber("grabberSpeed", speed);        //code for SmartDashboard which we still havent gotten to work
     }
-    
-    public void takeInput(int direction) {
-        //DriverJoysticks may have brought you here.
-        //Otherwise go to DriverJoysticks.update() and find the line that calls this method
-        //this sets the object variable direction to whatever the joystick input was.
-        //I think you can just get rid of this and check the joystick input in Grabber.update(), 
-        //but I'm not bold enough to change the code without being able to test the robot.
-        this.direction = direction;
-    }
-
+    //update method nuff said
     public void update() {
-        drive.setSafetyEnabled(false);          //guess we arent safe now. not sure why we have to do this but hey it doesnt
-        //the if below tests to see if emergency stop is enabled.
+        drive.setSafetyEnabled(false);          //if the robot stops recieving input, the motors will stop
         if(!RobotTemplate.driveSticks.getLeftJoystick().getRawButton(7) && !RobotTemplate.driveSticks.getRightJoystick().getRawButton(7)) {
-
+        //the above if is the second emergency stop
             //Set wheel speed
-            if (direction > 0) {
-                drive.tankDrive(speed, speed);
-            } else if (direction < 0) {
-                drive.tankDrive(-speed, -speed);
-            } else {
-                //stopped
-                drive.tankDrive(0, 0);
-            }
-        
-        }
+           if (MonitorControl.grabberIn.get()) {
+             drive.tankDrive(speed, speed);
+           }
+           else if (MonitorControl.grabberOut.get()) 
+                {
+                  drive.tankDrive(-speed, -speed);
+                }
+                else if (DriverJoysticks.grabberInLeft.get())
+                {
+                    drive.tankDrive(speed, speed);
+                }//end if 
+                else if (DriverJoysticks.grabberOutRight.get()) 
+                     {
+                        drive.tankDrive(-speed, -speed);
+                     }//end else/if
+                     else 
+                       { //stopped
+                         drive.tankDrive(0, 0);
+                       }//end else/else
+        }//end emergency if
         else {
             drive.tankDrive(0, 0);
-        }
-
-        direction = 0;
-
-    }
-}
+        }//end else
+    }//end update()
+}//end class Grabber
