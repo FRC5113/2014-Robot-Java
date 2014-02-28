@@ -16,20 +16,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriverJoysticks {
 
-    private Joystick rightStick;    //Use 2 Joystick 3D for driving
+    private Joystick rightStick;    //Use 2 Joystick Extreme 3D for driving
     private Joystick leftStick;
 
     private Button turboRight;
-    private int turboRightPos = 2;
+    private int turboRightPos = 3;
 
     private Button turboLeft;
-    private int turboLeftPos = 2;
+    private int turboLeftPos = 3;
 
     private Button slowRight;
-    private int slowRightPos = 2;
+    private int slowRightPos = 4;
 
     private Button slowLeft;
-    private int slowLeftPos = 2;
+    private int slowLeftPos = 4;
 
     private Button stopRight;
     private int stopRightPos = 10;

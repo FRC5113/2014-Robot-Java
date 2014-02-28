@@ -51,15 +51,13 @@ public class RobotTemplate extends SimpleRobot {
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-        
-        //this is here just incase something goes horribly wrong.   (I just say this cus I dont know why we did this)
-                                                                    //No one actually knows what exactly happens in the substructure
+        //No one actually knows what exactly happens in the substructure
         //if something breaks the while won't execute and the robot will stand still
         while (isOperatorControl() && isEnabled()) {
             driveSticks.update();   //DriverJoysticks, which are controlling input from the joysticks to make it meaningful
               
             monitor.update();       //MonitorControl update() method 
-                                    //Note: MonitorControl is the joystick for
+                                    //Note: MonitorControl is the joystick for control
             
             grabber.update();       //apparantly so is grabber, JAKE TELL ME WHAT YOU DID!!!
             wheels.useMotors();     //simple this is the wheels, like the ones that move the robot along the earths surface
