@@ -31,6 +31,8 @@ public class RobotTemplate extends SimpleRobot {
     public void autonomous() {
         wheels.leftEncoder.reset();
         wheels.rightEncoder.reset();
+        auto.time = System.currentTimeMillis();
+
         while (isAutonomous() && isEnabled()) {
             auto.update();
             Timer.delay(0.005f);
@@ -38,7 +40,7 @@ public class RobotTemplate extends SimpleRobot {
     }//end autonomous()
 
     protected void robotInit() {
-        
+
         wheels = new Drive();
         grabber = new Grabber();
         monitor = new MonitorControl(3);
@@ -55,14 +57,14 @@ public class RobotTemplate extends SimpleRobot {
         //if something breaks the while won't execute and the robot will stand still
         while (isOperatorControl() && isEnabled()) {
             driveSticks.update();   //DriverJoysticks, which are controlling input from the joysticks to make it meaningful
-              
+
             monitor.update();       //MonitorControl update() method 
-                                    //Note: MonitorControl is the joystick for control
-            
+            //Note: MonitorControl is the joystick for control
+
             grabber.update();       //apparantly so is grabber, JAKE TELL ME WHAT YOU DID!!!
             wheels.useMotors();     //simple this is the wheels, like the ones that move the robot along the earths surface
             base.update();          // remember that camera thats so cool, yea this is what makes it MMMMOOOOVVVVEEEE
-            
+
             Timer.delay(0.005f);    //gotta delay cus otherwise we get weird errors
         }//end while
     }//end operatorControl()

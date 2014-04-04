@@ -23,11 +23,14 @@ public class MonitorControl {
     public static JoystickButton grabberOut;
     private int grabberOutPos = 5;
 
-    private JoystickButton lifterUp;
-    private int lifterUpPos = 10;
+    public JoystickButton hardStopEnable;
+    public int hardStopEnablePos = 1;
 
-    private JoystickButton lifterDown;
-    private int lifterDownPos = 11;
+    public JoystickButton resetCamera;
+    public int resetCameraPos = 3;
+
+    public JoystickButton enableCameraMovement;
+    public int enableCameraMovementPos = 2;
 
     private JoystickButton eStop;
     private int eStopPos = 7;
@@ -36,9 +39,11 @@ public class MonitorControl {
         js = new Joystick(input);
         grabberIn = new JoystickButton(js, grabberInPos);
         grabberOut = new JoystickButton(js, grabberOutPos);
-        lifterUp = new JoystickButton(js, lifterUpPos);
-        lifterDown = new JoystickButton(js, lifterDownPos);
         eStop = new JoystickButton(js, eStopPos);
+        hardStopEnable = new JoystickButton(js, hardStopEnablePos);
+        resetCamera = new JoystickButton(js, resetCameraPos);
+        enableCameraMovement = new JoystickButton(js, enableCameraMovementPos);
+
     }
 
     public Joystick getJoystick() {
@@ -48,6 +53,15 @@ public class MonitorControl {
     public void update() {
         if (eStop.get()) {
             RobotTemplate.wheels.emergencyStop();
+        }
+        if (!hardStopEnable.get()) {
+            Drive.hardStopsEnabled = true;
+        } else {
+            Drive.hardStopsEnabled = false;
+        }
+        if (resetCamera.get()) {
+            RobotTemplate.base.x = 0.5f;
+            RobotTemplate.base.y = 0.5f;
         }
     }
 

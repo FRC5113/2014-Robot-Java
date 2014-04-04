@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -8,8 +8,6 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -35,17 +33,28 @@ public class Drive {
 
     boolean useTankDrive = true;
 
-    private double speedDefault = 0.5;
-    private double speedMax = 0.7;
-    private double speedMin = 0.25;
+    private double speedDefault = 0.7;
+    private double speedHigh = 0.85;
+    private double speed100 = 1.0;
+    private double speedMin = 0.44;
+
+    private double speedCurrentL = 0;
+    private double speedTargetL = 0;
+    private double speedCurrentR = 0;
+    private double speedTargetR = 0;
+
+    private double maxOutput = 0;
 
     private boolean isEmergencyStopped = false;
+
+    public static boolean hardStopsEnabled = false;
 
     public Drive() {
         rightEncoder.start();
         leftEncoder.start();
         rightEncoder.reset();
         leftEncoder.reset();
+
         SmartDashboard.putNumber("LeftEncoderGet", leftEncoder.get());
         SmartDashboard.putNumber("LeftEncoderGetDistance", leftEncoder.getDistance());
         SmartDashboard.putNumber("LeftEncoderGetRaw", leftEncoder.getRaw());
@@ -54,6 +63,16 @@ public class Drive {
         SmartDashboard.putNumber("RightEncoderGetDistance", rightEncoder.getDistance());
         SmartDashboard.putNumber("RightEncoderGetRaw", rightEncoder.getRaw());
         SmartDashboard.putNumber("Default Speed", speedDefault);
+
+    }
+
+    private double getIncrement() {
+        double inc = 0;
+        inc = 0.0045 * (Math.abs(speedTargetL - speedTargetR) * Math.abs(speedTargetL - speedTargetR) * 2 + 1) / maxOutput;
+        //Divide by maxOutput so that at min current output it ramps up faster because it is
+        //At less risk for tipping, and also so it ramps up at a same real world SPEED, as in m/s.
+        //Do less than one because it is from -1 to 1
+        return inc;
     }
 
     /*
@@ -66,8 +85,8 @@ public class Drive {
         double right = rightStick.getY();
         double left = leftStick.getY();
 
-        left *= 0.95;
-        right *= 0.95;
+        left *= 0.99;
+        right *= 0.99;
 
         drive.tankDrive(left, right);
     }
@@ -75,46 +94,98 @@ public class Drive {
     /*
      Controls simple player control, speed control, motor safety, etc.
      */
-    public void speedControl(boolean useSpeedMax, boolean useSpeedMin) {
+    public void speedControl(boolean useSpeedMax, boolean useSpeedMin, boolean useSpeedHigh) {
         drive.setSafetyEnabled(true);
 
         if (isEmergencyStopped == false) {
             //Set wheel speed
-            if (useSpeedMin) 
-            {
-                drive.setMaxOutput(speedMin);
+            if (useSpeedMin) {
+                maxOutput = speedMin;
             }//end if 
-            else if (useSpeedMax) 
-                 {
-                   drive.setMaxOutput(speedMax);
-                 }//end else/if
-                 else 
-                 {
-                   drive.setMaxOutput(speedDefault);
-                 }//end else/else
+            else if (useSpeedHigh) {
+                maxOutput = speedHigh;
+            }//end else/if
+            else if (useSpeedMax) {
+                maxOutput = speed100;
+            }//end else/else
+            else {
+                maxOutput = speedDefault;
+            }
 
         }//end if 
-        else 
-        {
-            drive.setMaxOutput(0.0);
+        else {
+            maxOutput = 0;
             isEmergencyStopped = false;
         }//end else
+        
+        //If going backwards, set the max speed to the default speed whenever going higher
+        //Prevents tipping
+        if(speedTargetL > 0 && speedTargetR > 0) {
+            if(maxOutput > speedDefault) {
+                maxOutput = speedDefault;
+            }
+        }
+
+        drive.setMaxOutput(1);
+
     }
     /*
      Stops motors from moving, but does not "Disable".
      */
 
-    public void emergencyStop() 
-    {
+    public void emergencyStop() {
         isEmergencyStopped = true;
     }
 
+    private void speedRamp() {
+        speedTargetR = RobotTemplate.driveSticks.getRightJoystick().getY() * maxOutput;
+        speedTargetL = RobotTemplate.driveSticks.getLeftJoystick().getY() * maxOutput;
+        rampLeft();
+        rampRight();
+    }
+
+    private void rampLeft() {
+        //if ((int) (speedCurrentL * 100) == (int) (speedTargetL * 100)) {
+        //If same percentage speed, with a +- 0.99% inaccuracy.
+        //} else {
+        if (speedCurrentL < speedTargetL) {
+            speedCurrentL += getIncrement();
+        } else {
+            speedCurrentL -= getIncrement();
+        }
+        //}
+    }
+
+    private void rampRight() {
+        //if ((int) (speedCurrentR * 100) == (int) (speedTargetR * 100)) {
+        //If same percentage speed, with a +- 0.99% inaccuracy.
+        //} else {
+        if (speedCurrentR < speedTargetR) {
+            speedCurrentR += getIncrement();
+        } else {
+            speedCurrentR -= getIncrement();
+        }
+        //}
+    }
+
     public void useMotors() {
-        tankDrive(RobotTemplate.driveSticks.getRightJoystick(), RobotTemplate.driveSticks.getLeftJoystick());
-    }    
-    public void simpleDrive(float left, float right) {
+        if (!hardStopsEnabled) {
+            speedRamp();
+            drive.tankDrive(speedCurrentL, speedCurrentR);
+        } else {
+
+            double right = RobotTemplate.driveSticks.getRightJoystick().getY();
+            double left = RobotTemplate.driveSticks.getLeftJoystick().getY();
+
+            left *= maxOutput * 0.99f;
+            right *= maxOutput * 0.99f;
+
+            drive.tankDrive(left, right);
+        }
+    }
+
+    public void simpleDrive(double left, double right) {
         drive.setMaxOutput(1.0);
         drive.tankDrive(left, right);
     }
-
 }

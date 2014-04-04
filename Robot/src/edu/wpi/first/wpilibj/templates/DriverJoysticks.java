@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This class pretty much starts control 
+ * This class pretty much starts control
+ *
  * @author MHS
  */
 public class DriverJoysticks {
@@ -19,11 +20,17 @@ public class DriverJoysticks {
     private Joystick rightStick;    //Use 2 Joystick Extreme 3D for driving
     private Joystick leftStick;
 
-    private Button turboRight;
-    private int turboRightPos = 3;
+    private Button fastRight;
+    private int fastRightPos = 3;
 
-    private Button turboLeft;
-    private int turboLeftPos = 3;
+    private Button fastLeft;
+    private int fastLeftPos = 3;
+
+    private Button maxRight;
+    private int maxRightPos = 2;
+
+    private Button maxLeft;
+    private int maxLeftPos = 2;
 
     private Button slowRight;
     private int slowRightPos = 4;
@@ -39,30 +46,31 @@ public class DriverJoysticks {
 
     public static Button grabberInLeft;
     private int grabberInLeftPos = 1;   //since you cant see what button this refers to on the joystick
-                                        //its the trigger (took me a while to figure it out)
+    //its the trigger (took me a while to figure it out)
     public static Button grabberOutRight;
     private int grabberOutRightPos = 1; //its that sneaky trigger again
 
     private double speedDefault;
     private double speedMax;
     private double speedMin;
-    
+
     public Joystick getRightJoystick() {
         return rightStick;
     }
-    
+
     public Joystick getLeftJoystick() {
         return leftStick;
     }
 
     public DriverJoysticks(int right, int left) {
-        
-        
+
         rightStick = new Joystick(right);
         leftStick = new Joystick(left);
 
-        turboRight = new JoystickButton(rightStick, turboRightPos);
-        turboLeft = new JoystickButton(leftStick, turboLeftPos);
+        fastRight = new JoystickButton(rightStick, fastRightPos);
+        fastLeft = new JoystickButton(leftStick, fastLeftPos);
+        maxRight = new JoystickButton(rightStick, maxRightPos);
+        maxLeft = new JoystickButton(leftStick, maxLeftPos);
         slowRight = new JoystickButton(rightStick, slowRightPos);
         slowLeft = new JoystickButton(leftStick, slowLeftPos);
         stopRight = new JoystickButton(rightStick, stopRightPos);
@@ -77,10 +85,10 @@ public class DriverJoysticks {
     }
 
     public void update() {
-        
+
         //Jake wrote a speed control function so that when the robot moves you can go faster or slower
         //this line does that fancy stuff, well it calls the method that does that fancy stuff
-        RobotTemplate.wheels.speedControl(turboRight.get() || turboLeft.get(), slowRight.get() || slowLeft.get());
+        RobotTemplate.wheels.speedControl(fastRight.get() || fastLeft.get(), slowRight.get() || slowLeft.get(), maxLeft.get() || maxRight.get());
 
         //this is where emergency stop is called, I can verify from personal experience that it does work
         if (stopRight.get() || stopLeft.get()) {

@@ -29,31 +29,32 @@ public class CameraBase {
     //this is the method that is called in RobotTemplate in the operatorControl() method
     //and is called about every 0.005s 
     public void update() {
-        if(Math.abs(js.getX()) > 0.05) 
-            x += js.getX() * add;   // this adjusts the values of x and y
-        if(Math.abs(js.getY()) > 0.05)
-            y -= js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
 
+        if (RobotTemplate.monitor.enableCameraMovement.get()) {
+            if (Math.abs(js.getX()) > 0.08) {
+                x += js.getX() * add;   // this adjusts the values of x and y
+            }
+            if (Math.abs(js.getY()) > 0.08) {
+                y -= js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
+            }
+        }
+        
         //this part just makes sure we don't go over 1.0 or under 0.0 on the servos
-        if (x > 1) 
-        {
+        if (x > 1) {
             x = 1;
         }//end "x" if
-        else if (x < 0) 
-             {
-                x = 0;
-             }//end "x" else/if
-        
+        else if (x < 0) {
+            x = 0;
+        }//end "x" else/if
+
         //now adjusting the y value
-        if (y > 1) 
-        {
+        if (y > 1) {
             y = 1;
         }//end "y" if 
-        else if (y < 0)
-             {
-               y = 0;
-             }//end "y" else/if
-        
+        else if (y < 0) {
+            y = 0;
+        }//end "y" else/if
+
         //puts those new values into the servos and moves the camera :D
         servoX.set(x);
         servoY.set(y);
