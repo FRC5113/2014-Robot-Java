@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class RobotTemplate extends SimpleRobot {
+public class Robot5113 extends SimpleRobot {
 
     public static Drive wheels;
     public static Grabber grabber;
@@ -24,6 +24,9 @@ public class RobotTemplate extends SimpleRobot {
     public static DriverJoysticks driveSticks;
     public static Autonomous auto;
     public static CameraBase base;
+    public static ARM arm;
+
+    public static boolean isEmergencyStopped = false;
 
     /**
      * This function is called once each time the robot enters autonomous mode.
@@ -47,6 +50,8 @@ public class RobotTemplate extends SimpleRobot {
         driveSticks = new DriverJoysticks(1, 2);
         auto = new Autonomous();
         base = new CameraBase();
+        arm = new ARM();
+        arm.setup();
     }//end robotInit()
 
     /**
@@ -56,11 +61,13 @@ public class RobotTemplate extends SimpleRobot {
         //No one actually knows what exactly happens in the substructure
         //if something breaks the while won't execute and the robot will stand still
         while (isOperatorControl() && isEnabled()) {
-            driveSticks.update();   //DriverJoysticks, which are controlling input from the joysticks to make it meaningful
 
+            isEmergencyStopped = false;
+
+            driveSticks.update();   //DriverJoysticks, which are controlling input from the joysticks to make it meaningful            
             monitor.update();       //MonitorControl update() method 
             //Note: MonitorControl is the joystick for control
-
+            arm.update();
             grabber.update();       //apparantly so is grabber, JAKE TELL ME WHAT YOU DID!!!
             wheels.useMotors();     //simple this is the wheels, like the ones that move the robot along the earths surface
             base.update();          // remember that camera thats so cool, yea this is what makes it MMMMOOOOVVVVEEEE

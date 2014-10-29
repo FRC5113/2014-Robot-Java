@@ -29,14 +29,10 @@ public class Grabber {
     //update method nuff said
     public void update() {
         drive.setSafetyEnabled(false);          //if the robot stops recieving input, the motors will stop
-        if (!RobotTemplate.driveSticks.getLeftJoystick().getRawButton(7) && !RobotTemplate.driveSticks.getRightJoystick().getRawButton(7)) {
+        if (!Robot5113.isEmergencyStopped) {
             //the above if is the second emergency stop
             //Set wheel speed
-            if (MonitorControl.grabberIn.get()) {
-                drive.tankDrive(speed, speed);
-            } else if (MonitorControl.grabberOut.get()) {
-                drive.tankDrive(-speed, -speed);
-            } else if (DriverJoysticks.grabberInLeft.get()) {
+            if (DriverJoysticks.grabberInLeft.get()) {
                 drive.tankDrive(speed, speed);
             }//end if 
             else if (DriverJoysticks.grabberOutRight.get()) {

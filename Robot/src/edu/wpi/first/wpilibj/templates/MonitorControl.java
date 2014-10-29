@@ -17,33 +17,32 @@ public class MonitorControl {
 
     private Joystick js;    //Use Attack 3 Joystick for monitor control
 
-    public static JoystickButton grabberIn;
-    private int grabberInPos = 4;
-
-    public static JoystickButton grabberOut;
-    private int grabberOutPos = 5;
-
     public JoystickButton hardStopEnable;
-    public int hardStopEnablePos = 1;
+    public int hardStopEnablePos = 11;
 
     public JoystickButton resetCamera;
     public int resetCameraPos = 3;
 
     public JoystickButton enableCameraMovement;
-    public int enableCameraMovementPos = 2;
+    public int enableCameraMovementPos = 3;
+
+    public JoystickButton armWheelsIn;
+    public int armWheelsInPos = 2;
+
+    public JoystickButton armWheelsOut;
+    public int armWheelsOutPos = 3;
 
     private JoystickButton eStop;
-    private int eStopPos = 7;
+    private int eStopPos = 10;
 
     public MonitorControl(int input) {
         js = new Joystick(input);
-        grabberIn = new JoystickButton(js, grabberInPos);
-        grabberOut = new JoystickButton(js, grabberOutPos);
         eStop = new JoystickButton(js, eStopPos);
         hardStopEnable = new JoystickButton(js, hardStopEnablePos);
         resetCamera = new JoystickButton(js, resetCameraPos);
         enableCameraMovement = new JoystickButton(js, enableCameraMovementPos);
-
+        armWheelsIn = new JoystickButton(js, armWheelsInPos);
+        armWheelsOut = new JoystickButton(js, armWheelsOutPos);
     }
 
     public Joystick getJoystick() {
@@ -52,17 +51,13 @@ public class MonitorControl {
 
     public void update() {
         if (eStop.get()) {
-            RobotTemplate.wheels.emergencyStop();
+            Robot5113.isEmergencyStopped = true;
         }
-        if (!hardStopEnable.get()) {
-            Drive.hardStopsEnabled = true;
-        } else {
-            Drive.hardStopsEnabled = false;
-        }
-        if (resetCamera.get()) {
-            RobotTemplate.base.x = 0.5f;
-            RobotTemplate.base.y = 0.5f;
-        }
+        //Drive.hardStopsEnabled = !hardStopEnable.get();
+        /*if (resetCamera.get()) {
+         Robot5113.base.x = 0.5f;
+         Robot5113.base.y = 0.5f;
+         }*/
     }
 
 }

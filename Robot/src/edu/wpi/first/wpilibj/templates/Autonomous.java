@@ -22,8 +22,8 @@ public class Autonomous {
     public Autonomous() {
         SmartDashboard.putNumber("autoLeft", autoLeft);     //attempted placing values onto smartdashboard
         SmartDashboard.putNumber("autoRight", autoRight);   //note: we aren't very good at this
-        RobotTemplate.wheels.leftEncoder.setDistancePerPulse(1 / 636.61);
-        RobotTemplate.wheels.rightEncoder.setDistancePerPulse(1 / 636.61);
+        Robot5113.wheels.leftEncoder.setDistancePerPulse(1 / 636.61);
+        Robot5113.wheels.rightEncoder.setDistancePerPulse(1 / 636.61);
     }
 
     public void update() {
@@ -35,23 +35,23 @@ public class Autonomous {
         else {
             //the conversion factor between meters and tics. is 1 meter = 636.61 tics(which is what encoders measure)   
 
-            leftDistance = Math.abs(RobotTemplate.wheels.leftEncoder.getDistance());    //use absolute value
-            rightDistance = Math.abs(RobotTemplate.wheels.rightEncoder.getDistance());  //for comparison purposes
+            leftDistance = Math.abs(Robot5113.wheels.leftEncoder.getDistance());    //use absolute value
+            rightDistance = Math.abs(Robot5113.wheels.rightEncoder.getDistance());  //for comparison purposes
             //test this on raw values then on distance values if possible.
             if (leftDistance < distance || rightDistance < distance) {
-                RobotTemplate.wheels.simpleDrive(autoLeft, autoRight);
+                Robot5113.wheels.simpleDrive(autoLeft, autoRight);
             } else {
                 reachedGoal();
             }//end else                                                      //this should occur once the robot has moved the amount of meters.
         }
 
     }//end update()
-    
+
     private void reachedGoal() {
-                RobotTemplate.wheels.simpleDrive(-0.3f, -0.34f);
-                //RobotTemplate.wheels.simpleDrive((Math.sin((System.currentTimeMillis() / 5000f))) / 3f, (Math.cos((System.currentTimeMillis() / 5000f))) / 3f);
-                //Complicated math stuff that makes the robot shift right and left to allow it to push the ball in if needed.
-                RobotTemplate.grabber.drive.tankDrive(1, 1);       //this part signifies that the robot stop moving
-      
+        Robot5113.wheels.simpleDrive(-0.3f, -0.34f);
+        //RobotTemplate.wheels.simpleDrive((Math.sin((System.currentTimeMillis() / 5000f))) / 3f, (Math.cos((System.currentTimeMillis() / 5000f))) / 3f);
+        //Complicated math stuff that makes the robot shift right and left to allow it to push the ball in if needed.
+        Robot5113.grabber.drive.tankDrive(1, 1);       //this part signifies that the robot stop moving
+
     }
 }//end class Autonomous

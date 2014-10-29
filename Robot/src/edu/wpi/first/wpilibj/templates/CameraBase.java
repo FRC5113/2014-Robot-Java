@@ -14,31 +14,32 @@ import edu.wpi.first.wpilibj.Servo;
  */
 public class CameraBase {
 
-    int xOut = 9;       //the digital I/O ports
-    int yOut = 8;       //yup still digital I/O ports
+    int xOut = 10;       //the digital I/O ports
+    int yOut = 9;       //yup still digital I/O ports
 
     float x = 0.5f;     //This is gonna be the starting point for the camera
     float y = 0.5f;     //values range from 0.0 to 1.0 so starting in the middle is cool
     float add = 0.005f; //when we adjust the camera, we add this number to x or y on every update()
+    float deadzone = 0.08f;
 
     Servo servoX = new Servo(xOut);     //those motor things on the camera are called Servos apparantly
     Servo servoY = new Servo(yOut);
 
-    Joystick js = RobotTemplate.monitor.getJoystick();  //this finds out which button we are using to control the camera
+    Joystick js = Robot5113.monitor.getJoystick();  //this finds out which button we are using to control the camera
 
     //this is the method that is called in RobotTemplate in the operatorControl() method
     //and is called about every 0.005s 
     public void update() {
 
-        if (RobotTemplate.monitor.enableCameraMovement.get()) {
-            if (Math.abs(js.getX()) > 0.08) {
+        if (Robot5113.monitor.enableCameraMovement.get()) {
+            if (Math.abs(js.getX()) > deadzone) {
                 x += js.getX() * add;   // this adjusts the values of x and y
             }
-            if (Math.abs(js.getY()) > 0.08) {
-                y -= js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
+            if (Math.abs(js.getY()) > deadzone) {
+                y += js.getY() * add;   //x is += cus its wired correctly, y is -= cus its wired backwards on the robot
             }
         }
-        
+
         //this part just makes sure we don't go over 1.0 or under 0.0 on the servos
         if (x > 1) {
             x = 1;

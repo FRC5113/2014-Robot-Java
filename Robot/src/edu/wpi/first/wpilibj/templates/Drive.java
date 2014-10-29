@@ -33,7 +33,7 @@ public class Drive {
 
     boolean useTankDrive = true;
 
-    private double speedDefault = 0.7;
+    private double speedDefault = 0.6;
     private double speedHigh = 0.85;
     private double speed100 = 1.0;
     private double speedMin = 0.44;
@@ -45,9 +45,7 @@ public class Drive {
 
     private double maxOutput = 0;
 
-    private boolean isEmergencyStopped = false;
-
-    public static boolean hardStopsEnabled = false;
+    public static boolean hardStopsEnabled = true;
 
     public Drive() {
         rightEncoder.start();
@@ -97,13 +95,13 @@ public class Drive {
     public void speedControl(boolean useSpeedMax, boolean useSpeedMin, boolean useSpeedHigh) {
         drive.setSafetyEnabled(true);
 
-        if (isEmergencyStopped == false) {
+        if (Robot5113.isEmergencyStopped == false) {
             //Set wheel speed
             if (useSpeedMin) {
-                maxOutput = speedMin;
+                maxOutput = speedHigh;
             }//end if 
             else if (useSpeedHigh) {
-                maxOutput = speedHigh;
+                maxOutput = speedMin;
             }//end else/if
             else if (useSpeedMax) {
                 maxOutput = speed100;
@@ -115,31 +113,28 @@ public class Drive {
         }//end if 
         else {
             maxOutput = 0;
-            isEmergencyStopped = false;
         }//end else
-        
+
         //If going backwards, set the max speed to the default speed whenever going higher
         //Prevents tipping
-        if(speedTargetL > 0 && speedTargetR > 0) {
-            if(maxOutput > speedDefault) {
-                maxOutput = speedDefault;
+        if (speedTargetL > 0 && speedTargetR > 0) {
+            if (maxOutput > 0.43f) {
+                maxOutput = 0.43f;
             }
+            if (!Robot5113.arm.limitSwitchLower.get()) {
+                hardStopsEnabled = true;
+            } else {
+                hardStopsEnabled = false;
+            }
+        } else {
+            hardStopsEnabled = true;
         }
 
-        drive.setMaxOutput(1);
-
-    }
-    /*
-     Stops motors from moving, but does not "Disable".
-     */
-
-    public void emergencyStop() {
-        isEmergencyStopped = true;
     }
 
     private void speedRamp() {
-        speedTargetR = RobotTemplate.driveSticks.getRightJoystick().getY() * maxOutput;
-        speedTargetL = RobotTemplate.driveSticks.getLeftJoystick().getY() * maxOutput;
+        speedTargetR = Robot5113.driveSticks.getRightJoystick().getY() * maxOutput;
+        speedTargetL = Robot5113.driveSticks.getLeftJoystick().getY() * maxOutput;
         rampLeft();
         rampRight();
     }
@@ -174,8 +169,8 @@ public class Drive {
             drive.tankDrive(speedCurrentL, speedCurrentR);
         } else {
 
-            double right = RobotTemplate.driveSticks.getRightJoystick().getY();
-            double left = RobotTemplate.driveSticks.getLeftJoystick().getY();
+            double right = Robot5113.driveSticks.getRightJoystick().getY();
+            double left = Robot5113.driveSticks.getLeftJoystick().getY();
 
             left *= maxOutput * 0.99f;
             right *= maxOutput * 0.99f;

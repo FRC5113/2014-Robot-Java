@@ -67,19 +67,19 @@ public class DriverJoysticks {
         rightStick = new Joystick(right);
         leftStick = new Joystick(left);
 
-        fastRight = new JoystickButton(rightStick, fastRightPos);
-        fastLeft = new JoystickButton(leftStick, fastLeftPos);
-        maxRight = new JoystickButton(rightStick, maxRightPos);
-        maxLeft = new JoystickButton(leftStick, maxLeftPos);
-        slowRight = new JoystickButton(rightStick, slowRightPos);
-        slowLeft = new JoystickButton(leftStick, slowLeftPos);
-        stopRight = new JoystickButton(rightStick, stopRightPos);
-        stopLeft = new JoystickButton(leftStick, stopLeftPos);
-        grabberInLeft = new JoystickButton(leftStick, grabberInLeftPos);
-        grabberOutRight = new JoystickButton(rightStick, grabberOutRightPos);
+        fastRight = new JoystickButton(leftStick, fastRightPos);
+        fastLeft = new JoystickButton(rightStick, fastLeftPos);
+        maxRight = new JoystickButton(leftStick, maxRightPos);
+        maxLeft = new JoystickButton(rightStick, maxLeftPos);
+        slowRight = new JoystickButton(leftStick, slowRightPos);
+        slowLeft = new JoystickButton(rightStick, slowLeftPos);
+        stopRight = new JoystickButton(leftStick, stopRightPos);
+        stopLeft = new JoystickButton(rightStick, stopLeftPos);
+        grabberInLeft = new JoystickButton(rightStick, grabberInLeftPos);
+        grabberOutRight = new JoystickButton(leftStick, grabberOutRightPos);
 
-        SmartDashboard.putNumber("speedMax", speedMax);
-        SmartDashboard.putNumber("speedMin", speedMin);         //marks our failed attempts at getting SmartDashboard working
+        SmartDashboard.putNumber("speedMax", speedMin);
+        SmartDashboard.putNumber("speedMin", speedMax);         //marks our failed attempts at getting SmartDashboard working
         SmartDashboard.putNumber("speedDefault", speedDefault);
 
     }
@@ -88,11 +88,11 @@ public class DriverJoysticks {
 
         //Jake wrote a speed control function so that when the robot moves you can go faster or slower
         //this line does that fancy stuff, well it calls the method that does that fancy stuff
-        RobotTemplate.wheels.speedControl(fastRight.get() || fastLeft.get(), slowRight.get() || slowLeft.get(), maxLeft.get() || maxRight.get());
+        Robot5113.wheels.speedControl(fastRight.get() || fastLeft.get(), slowRight.get() || slowLeft.get(), maxLeft.get() || maxRight.get());
 
         //this is where emergency stop is called, I can verify from personal experience that it does work
         if (stopRight.get() || stopLeft.get()) {
-            RobotTemplate.wheels.emergencyStop();
+            Robot5113.isEmergencyStopped = true;
         }
     }//end based update()
 }//end class DriverJoysticks
